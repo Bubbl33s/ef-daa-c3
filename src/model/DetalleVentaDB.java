@@ -32,10 +32,9 @@ public class DetalleVentaDB extends DBConn {
                 pstmt.executeUpdate();
             }
         } catch (SQLException sqle) {
-            // Manejar o relanzar la excepción según sea necesario
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("DetalleVentaError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }
 }

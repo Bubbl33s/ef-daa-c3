@@ -9,6 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.CallableStatement;
+
+import controller.Producto;
 
 /**
  *
@@ -17,10 +20,13 @@ import java.util.List;
 public class ProductoDB extends DBConn {
     public static void listar() {
         try {
-            rs = stmt.executeQuery("SELECT id_producto, descripcion_producto, precio_producto FROM tb_producto");
+            rs = stmt.executeQuery("SELECT * FROM tb_producto");
 
             while (rs.next()) {
-                System.out.println(rs.getString("id_producto") + " - " + rs.getString("descripcion_producto") + " - S/. " + rs.getDouble("precio_producto"));
+                System.out.println(rs.getString("id_producto") + " - " +
+                        rs.getString("descripcion_producto") + " - S/. " +
+                        rs.getDouble("precio_producto") + " - " +
+                        rs.getInt("stock_producto"));
             }
 
             rs.close();
@@ -28,7 +34,7 @@ public class ProductoDB extends DBConn {
         catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("ProductoError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }
     
@@ -46,7 +52,7 @@ public class ProductoDB extends DBConn {
         } catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("ProductoError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
 
         // Convierte la lista a un array de String
@@ -77,9 +83,109 @@ public class ProductoDB extends DBConn {
             // Manejar o relanzar la excepción según sea necesario
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("ProductoError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
 
         return precio;
+    }
+
+    // Método para insertar un nuevo producto
+    public static void insertarProducto(Producto producto) {
+        try {
+            String sql = "INSERT INTO tb_producto (id_producto, descripcion_producto, precio_producto, stock_producto) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, producto.getId());
+                pstmt.setString(2, producto.getDescripcion());
+                pstmt.setDouble(3, producto.getPrecio());
+                pstmt.setInt(4, producto.getStock());
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+    }
+
+    // Método para obtener un producto por su ID
+    public static Producto obtenerProductoPorId(String idProducto) {
+        Producto producto = null;
+        try {
+            String sql = "SELECT id_producto, descripcion_producto, precio_producto, stock_producto FROM tb_producto WHERE id_producto = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, idProducto);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        String id = rs.getString("id_producto");
+                        String descripcion = rs.getString("descripcion_producto");
+                        double precio = rs.getDouble("precio_producto");
+                        int stock = rs.getInt("stock_producto");
+                        producto = new Producto(id, descripcion, precio, stock);
+                    }
+                }
+            }
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return producto;
+    }
+
+    // Método para actualizar un producto
+    public static void actualizarProducto(Producto producto) {
+        try {
+            String sql = "UPDATE tb_producto SET descripcion_producto = ?, precio_producto = ?, stock_producto = ? WHERE id_producto = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, producto.getDescripcion());
+                pstmt.setDouble(2, producto.getPrecio());
+                pstmt.setInt(3, producto.getStock());
+                pstmt.setString(4, producto.getId());
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+    }
+
+    // Método para eliminar un producto por su ID
+    public static void eliminarProducto(String idProducto) {
+        try {
+            String sql = "DELETE FROM tb_producto WHERE id_producto = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, idProducto);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+    }
+    
+    public static void actualizarStockProducto(String idProducto, int cantidadVendida) {
+        try {
+            // Llamar al procedimiento almacenado
+            String sql = "{CALL actualizar_stock_producto(?, ?)}";
+            
+            // Preparar la llamada al procedimiento almacenado
+            try (CallableStatement cstmt = conn.prepareCall(sql)) {
+                // Establecer los parámetros
+                cstmt.setString(1, idProducto);
+                cstmt.setInt(2, cantidadVendida);
+
+                // Ejecutar el procedimiento almacenado
+                cstmt.execute();
+            }
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            sqle.printStackTrace();
+        }
     }
 }

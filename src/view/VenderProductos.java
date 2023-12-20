@@ -4,10 +4,7 @@
  */
 package view;
 
-import model.ProductoDB;
-import model.ClienteDB;
-import model.VentaDB;
-import model.DetalleVentaDB;
+import model.*;
 
 import controller.DetalleVenta;
 import controller.Venta;
@@ -43,9 +40,15 @@ public class VenderProductos {
         System.out.println("\nSELECCIONE UN CLIENTE:\n");
         ClienteDB.listar();
         
+        String[] idClientes = ClienteDB.obtenerIds();
+        
+        // TODO: HACER ABSTRACTO
         // Obtener codigos
-        System.out.print("\nCódigo del cliente: ");
-        idCliente = scanner.next().toUpperCase();
+        do {
+            System.out.print("\nCódigo del cliente: ");
+            idCliente = scanner.next().toUpperCase();
+        }
+        while (!Arrays.asList(idClientes).contains(idCliente));
         // TODO: ERROR HANDLING
     }
             
@@ -59,7 +62,7 @@ public class VenderProductos {
         
         String[] idProductos = ProductoDB.obtenerIds();
         
-        // TODO: INSERTAR PRODUCTOS
+        // INSERTAR PRODUCTOS
         do {
             String idProducto;
             double precio;
@@ -90,17 +93,23 @@ public class VenderProductos {
         
         LocalDate fecha = LocalDate.now();
         
-        // TODO: GENERAR VENTA
+        // GENERAR VENTA
         Venta venta = new Venta(fecha, idCliente, idVendedor, subTotal, descuento);
         VentaDB.insertar(venta);
         String idVenta = VentaDB.obtenerUltimoId();
         
-        // TODO: GENERAR DETALLE VENTA (COMPROBANTE DE PAGO)
+        // GENERAR DETALLE VENTA (COMPROBANTE DE PAGO)
         // Insertar detalles de venta en la base de datos
+        // ACTUALIZAR STOCK PRODUCTO
         for (DetalleVenta detalle : detallesVenta) {
             detalle.setIdVenta(idVenta);
             DetalleVentaDB.insertar(detalle);
+            // Actualizar stock producto
+            ProductoDB.actualizarStockProducto(detalle.getIdProducto(), detalle.getCantidadVendida());
         }
+        
+        // GENERAR COMPROBANTE
+        Reportes.generarComprobante(idVenta);
         
         System.out.println("\nGRACIAS POR SU COMPRA!\n");
     }

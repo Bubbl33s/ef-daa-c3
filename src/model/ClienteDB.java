@@ -5,8 +5,10 @@
 package model;
 
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import static model.DBConn.rs;
+import static model.DBConn.stmt;
 
 /**
  *
@@ -28,5 +30,26 @@ public class ClienteDB extends DBConn {
             System.out.println("SQLState: " + sqle.getSQLState());
             System.out.println("VendorError: " + sqle.getErrorCode());
         }
+    }
+    
+    public static String[] obtenerIds() {
+        List<String> idsProductos = new ArrayList<>();
+
+        try {
+            rs = stmt.executeQuery("SELECT id_producto FROM tb_producto");
+
+            while (rs.next()) {
+                idsProductos.add(rs.getString("id_producto"));
+            }
+
+            rs.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+
+        // Convierte la lista a un array de String
+        return idsProductos.toArray(String[]::new);
     }
 }

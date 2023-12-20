@@ -33,7 +33,7 @@ public class VentaDB extends DBConn{
         } catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VentaError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
 
         return ultimoIdVenta;
@@ -63,7 +63,7 @@ public class VentaDB extends DBConn{
             // Manejar o relanzar la excepción según sea necesario
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VentaError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }    
 }

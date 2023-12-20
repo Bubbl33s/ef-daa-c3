@@ -7,6 +7,8 @@ package view;
 import java.util.Scanner;
 import controller.Vendedor;
 
+import model.DBConn;
+
 /**
  *
  * @author maste
@@ -67,5 +69,7 @@ public class MenuPrincipal {
             }
 
         } while (opcion != 7);
+        
+        DBConn.closeConnection();
     }
 }

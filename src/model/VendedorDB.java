@@ -28,7 +28,7 @@ public class VendedorDB extends DBConn {
         catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendedorError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
 
         return result;
@@ -47,7 +47,7 @@ public class VendedorDB extends DBConn {
         catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendedorError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
         
         return "";
@@ -73,7 +73,7 @@ public class VendedorDB extends DBConn {
         } catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendedorError: " + sqle.getErrorCode());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
 
         return vendedor;
