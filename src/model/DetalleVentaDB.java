@@ -37,4 +37,18 @@ public class DetalleVentaDB extends DBConn {
             System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }
+    
+    public static void eliminarDetalleVenta(String idVenta) {
+        try {
+            String sql = "DELETE FROM tb_detalle_venta WHERE id_venta = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, idVenta);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+    }  
 }

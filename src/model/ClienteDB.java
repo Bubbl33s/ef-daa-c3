@@ -36,10 +36,10 @@ public class ClienteDB extends DBConn {
         List<String> idsProductos = new ArrayList<>();
 
         try {
-            rs = stmt.executeQuery("SELECT id_producto FROM tb_producto");
+            rs = stmt.executeQuery("SELECT id_cliente FROM tb_cliente");
 
             while (rs.next()) {
-                idsProductos.add(rs.getString("id_producto"));
+                idsProductos.add(rs.getString("id_cliente"));
             }
 
             rs.close();

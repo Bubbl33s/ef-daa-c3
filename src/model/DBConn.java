@@ -15,7 +15,8 @@ public class DBConn {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost/negocioventas?user=root&password=admin");
             stmt = conn.createStatement();
-        } catch (SQLException sqle) {
+        }
+        catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
             System.out.println("VendorError: " + sqle.getErrorCode());
@@ -28,13 +29,20 @@ public class DBConn {
 
     public static void closeConnection() {
         try {
-            stmt.close();
-            conn.close();
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
             System.out.println("SQLState: " + sqle.getSQLState());
             System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        finally {
+            System.out.println("\nConexión terminada...");
         }
     }
 }

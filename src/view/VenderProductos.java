@@ -25,7 +25,7 @@ public class VenderProductos {
     static String idCliente;
     static double subTotal;
     static double descuento;
-    // Lista para almacenar los detalles de venta
+    static final double IGVPORCENTAJE = 0.18;
     static List<DetalleVenta> detallesVenta = new ArrayList<>();
     
     public static void iniciarVenta(String idVen) {
@@ -49,7 +49,6 @@ public class VenderProductos {
             idCliente = scanner.next().toUpperCase();
         }
         while (!Arrays.asList(idClientes).contains(idCliente));
-        // TODO: ERROR HANDLING
     }
             
     public static void mostrarProductos() {
@@ -89,10 +88,43 @@ public class VenderProductos {
             System.out.print("Ingrese 's' para continuar: ");
             continuar = scanner.next().toLowerCase().charAt(0);
         }
-        while (continuar == 's'); 
+        while (continuar == 's');
         
+        Character desc;
+        // MOSTRAR DATOS ANTES DE LA GENERACIÓN
+        System.out.print("Ingrese 's' para aplicar descuento: ");
+        desc = scanner.next().toLowerCase().charAt(0);
+        
+        if (desc == 's') {
+            System.out.print("Ingrese descuento (%): ");
+            descuento = scanner.nextDouble();
+        }
+        
+        double igv = subTotal*IGVPORCENTAJE;
+        
+        // Recuento
+        System.out.println("\nDETALLES DE LA COMPRA\n");
+        System.out.printf("Sub total: S/ %.2f\n", subTotal);
+        System.out.printf("IGV (18 %%): S/. %.2f\n", igv);
+        System.out.printf("Descuento: S/. %.2f\n", descuento);
+        System.out.printf("TOTAL: S/. %.2f\n", subTotal + igv - descuento);
+        
+        Character finalizar;
+        
+        System.out.print("\n's' para finalizar venta, otra opción la cancelará: ");
+        finalizar = scanner.next().toLowerCase().charAt(0);
+        
+        if (finalizar == 's') {
+            generarVenta();
+        }
+        else {
+            System.out.println("\nVENTA CANCELADA\n");
+        }
+    }
+    
+    private static void generarVenta() {
         LocalDate fecha = LocalDate.now();
-        
+
         // GENERAR VENTA
         Venta venta = new Venta(fecha, idCliente, idVendedor, subTotal, descuento);
         VentaDB.insertar(venta);

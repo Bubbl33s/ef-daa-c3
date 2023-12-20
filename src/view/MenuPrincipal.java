@@ -46,7 +46,7 @@ public class MenuPrincipal {
                     VenderProductos.iniciarVenta(this.vendedor.getId());
                     break;
                 case 2:
-                    // Lógica para anular comprobante de pago
+                    AnularComprobante.iniciar();
                     break;
                 case 3:
                     // Lógica para gestionar inventario

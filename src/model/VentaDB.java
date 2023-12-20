@@ -9,6 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import controller.Venta;
+import java.util.ArrayList;
+import java.util.List;
+import static model.DBConn.rs;
+import static model.DBConn.stmt;
 
 /**
  *
@@ -65,5 +69,63 @@ public class VentaDB extends DBConn{
             System.out.println("SQLState: " + sqle.getSQLState());
             System.out.println("VendorError: " + sqle.getErrorCode());
         }
+    }
+
+    public static void listar() {
+        try {
+            rs = stmt.executeQuery("SELECT * FROM tb_venta");
+
+            while (rs.next()) {
+                System.out.println(rs.getString("id_venta") + " - " +
+                        rs.getString("id_cliente") + " - " +
+                        rs.getString("id_vendedor") + " - " +
+                        rs.getDate("fecha_venta") + " - S/. " +
+                        rs.getDouble("sub_total_venta") + " - S/. " +
+                        rs.getDouble("igv_venta") + " - S/. " +
+                        rs.getDouble("descuento_venta") + "% - s/. " +
+                        rs.getDouble("total_venta"));
+            }
+
+            rs.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+    }
+
+    public static void eliminarVenta(String idVenta) {
+        try {
+            String sql = "DELETE FROM tb_venta WHERE id_venta = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, idVenta);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+    }
+
+    public static String[] obtenerIds() {
+        List<String> idsProductos = new ArrayList<>();
+
+        try {
+            rs = stmt.executeQuery("SELECT id_venta FROM tb_venta");
+
+            while (rs.next()) {
+                idsProductos.add(rs.getString("id_venta"));
+            }
+
+            rs.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+
+        // Convierte la lista a un array de String
+        return idsProductos.toArray(String[]::new);
     }    
 }
