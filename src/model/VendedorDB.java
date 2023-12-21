@@ -16,7 +16,7 @@ import controller.Vendedor;
  *
  * @author maste
  */
-public class VendedorDB extends DBConn {
+public non-sealed class VendedorDB extends DBConn {
     public static boolean validarUsuario(String user) {
         boolean result = false;
 
@@ -28,9 +28,7 @@ public class VendedorDB extends DBConn {
             }
         }
         catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
 
         return result;
@@ -47,9 +45,7 @@ public class VendedorDB extends DBConn {
             }
         }
         catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
         
         return "";
@@ -73,9 +69,7 @@ public class VendedorDB extends DBConn {
                 }
             }
         } catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
 
         return vendedor;
@@ -182,11 +176,5 @@ public class VendedorDB extends DBConn {
         } catch (SQLException sqle) {
             handleSQLException(sqle);
         }
-    }
-
-    private static void handleSQLException(SQLException sqle) {
-        System.out.println("SQLException: " + sqle.getMessage());
-        System.out.println("SQLState: " + sqle.getSQLState());
-        System.out.println("VendorError: " + sqle.getErrorCode());
     }
 }

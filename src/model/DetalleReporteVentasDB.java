@@ -13,7 +13,7 @@ import controller.DetalleReporteVentas;
  *
  * @author maste
  */
-public class DetalleReporteVentasDB extends DBConn {
+public non-sealed class DetalleReporteVentasDB extends DBConn {
     public static void insertarDetalleReporteVentas(DetalleReporteVentas detalle) {
         try {
             String sql = "INSERT INTO TB_DETALLE_REP_VENTAS (id_reporte_ventas, id_venta) VALUES (?, ?)";
@@ -24,7 +24,7 @@ public class DetalleReporteVentasDB extends DBConn {
             }
 
         } catch (SQLException sqle) {
-
+            handleSQLException(sqle);
         }
     } 
 }

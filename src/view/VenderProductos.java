@@ -42,8 +42,6 @@ public class VenderProductos {
         
         String[] idClientes = ClienteDB.obtenerIds();
         
-        // TODO: HACER ABSTRACTO
-        // Obtener codigos
         do {
             System.out.print("\nCódigo del cliente: ");
             idCliente = scanner.next().toUpperCase();
@@ -52,8 +50,6 @@ public class VenderProductos {
     }
             
     public static void mostrarProductos() {
-        // TODO: ELEGIR CLIENTE
-        
         System.out.println("\nPRODUCTOS DISPONIBLES:\n");
         ProductoDB.listar();
         
@@ -61,7 +57,6 @@ public class VenderProductos {
         
         String[] idProductos = ProductoDB.obtenerIds();
         
-        // INSERTAR PRODUCTOS
         do {
             String idProducto;
             double precio;
@@ -92,7 +87,6 @@ public class VenderProductos {
         while (continuar == 's');
         
         Character desc;
-        // MOSTRAR DATOS ANTES DE LA GENERACIÓN
         System.out.print("Ingrese 's' para aplicar descuento: ");
         desc = scanner.next().toLowerCase().charAt(0);
         
@@ -103,11 +97,10 @@ public class VenderProductos {
         
         double igv = subTotal*IGVPORCENTAJE;
         
-        // Recuento
         System.out.println("\nDETALLES DE LA COMPRA\n");
         System.out.printf("Sub total: S/ %.2f\n", subTotal);
         System.out.printf("IGV (18 %%): S/. %.2f\n", igv);
-        System.out.printf("Descuento: S/. %.2f\n", descuento);
+        System.out.printf("Descuento: %.2f%%\n", descuento);
         System.out.printf("TOTAL: S/. %.2f\n", subTotal + igv - descuento);
         
         Character finalizar;
@@ -126,22 +119,16 @@ public class VenderProductos {
     private static void generarVenta() {
         LocalDate fecha = LocalDate.now();
 
-        // GENERAR VENTA
         Venta venta = new Venta(fecha, idCliente, idVendedor, subTotal, descuento);
         VentaDB.insertar(venta);
         String idVenta = VentaDB.obtenerUltimoId();
-        
-        // GENERAR DETALLE VENTA (COMPROBANTE DE PAGO)
-        // Insertar detalles de venta en la base de datos
-        // ACTUALIZAR STOCK PRODUCTO
+
         for (DetalleVenta detalle : detallesVenta) {
             detalle.setIdVenta(idVenta);
             DetalleVentaDB.insertar(detalle);
-            // Actualizar stock producto
             ProductoDB.actualizarStockProducto(detalle.getIdProducto(), detalle.getCantidadVendida());
         }
         
-        // GENERAR COMPROBANTE
         Reportes.generarComprobante(idVenta);
         
         System.out.println("\nGRACIAS POR SU COMPRA!\n");

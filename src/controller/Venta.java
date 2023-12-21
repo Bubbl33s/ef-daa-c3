@@ -67,7 +67,12 @@ public class Venta {
         this.igv = this.subTotal * 0.18;
         this.descuento = (this.subTotal + this.igv) * (descuento / 100);
     }
-    
+        
+    @Override
+    public String toString() {
+        return "Venta [id=" + id + ", fecha=" + fecha + ", total=" + total + "]";
+    }
+
     /**
      * @return the id
      */

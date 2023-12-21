@@ -9,13 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class ReporteInventarioDB extends DBConn {
+public non-sealed class ReporteInventarioDB extends DBConn {
 
     public static void generarReporteInventario() {
         try {
             LocalDate fechaActual = LocalDate.now();
 
-            // Insertar entrada en la tabla TB_REPORTE_INVENTARIO
             String sqlInsertReporte = "INSERT INTO TB_REPORTE_INVENTARIO (fecha_reporte_inventario) VALUES (?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sqlInsertReporte)) {
                 pstmt.setDate(1, java.sql.Date.valueOf(fechaActual));
@@ -39,7 +38,7 @@ public class ReporteInventarioDB extends DBConn {
             }
 
         } catch (SQLException sqle) {
-            
+            handleSQLException(sqle);
         }
 
         return ultimoId;

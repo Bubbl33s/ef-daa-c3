@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import controller.Cliente;
 
-public class ClienteDB extends DBConn {
+public non-sealed class ClienteDB extends DBConn {
 
     public static void listar() {
         try {
@@ -42,7 +42,6 @@ public class ClienteDB extends DBConn {
             handleSQLException(sqle);
         }
 
-        // Convierte la lista a un array de String
         return idsClientes.toArray(String[]::new);
     }
 
@@ -110,13 +109,5 @@ public class ClienteDB extends DBConn {
         } catch (SQLException sqle) {
             handleSQLException(sqle);
         }
-    }
-
-    // Puedes agregar otros métodos según tus necesidades
-
-    private static void handleSQLException(SQLException sqle) {
-        System.out.println("SQLException: " + sqle.getMessage());
-        System.out.println("SQLState: " + sqle.getSQLState());
-        System.out.println("VendorError: " + sqle.getErrorCode());
     }
 }

@@ -2,19 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package controller;
 
 /**
  *
  * @author maste
  */
-public class Vendedor extends Usuario {
+
+// CLASE SOLO HECHA PARA EL POLIMORFISMO
+public class Admin extends Usuario {
     private String id;
     private String apellidos;
     private String nombres;
     
-    public Vendedor(String user, String password, String id, String apellidos, String nombres) {
+    public Admin(String user, String password, String id, String apellidos, String nombres) {
         super(user, password);
         this.id = id;
         this.apellidos = apellidos;
@@ -23,7 +24,7 @@ public class Vendedor extends Usuario {
     
     @Override
     void verCredenciales() {
-        System.out.println("\nCredenciales de Vendedor:\n");
+        System.out.println("\nCredenciales de Administrador:\n");
         System.out.printf("Usuario: %s\n", this.user);
         System.out.printf("Contraseña: %s\n", this.password);
     }
@@ -69,32 +70,6 @@ public class Vendedor extends Usuario {
     public void setNombres(String nombres) {
         this.nombres = nombres;
     }
-
-    /**
-     * @return the user
-     */
-    public String getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    
+    
 }

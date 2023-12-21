@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DBConn {
+public sealed class DBConn permits ClienteDB, DetalleReporteInventarioDB, DetalleReporteVentasDB,
+        DetalleVentaDB, ProductoDB, ReporteInventarioDB, ReporteVentasDB, Reportes, VendedorDB, VentaDB {
     protected static Connection conn;
     protected static Statement stmt;
     protected static ResultSet rs;
@@ -17,9 +18,7 @@ public class DBConn {
             stmt = conn.createStatement();
         }
         catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
     }
 
@@ -44,5 +43,11 @@ public class DBConn {
         finally {
             System.out.println("\nConexión terminada...");
         }
+    }
+    
+    protected static void handleSQLException(SQLException sqle) {
+        System.out.println("SQLException: " + sqle.getMessage());
+        System.out.println("SQLState: " + sqle.getSQLState());
+        System.out.println("VendorError: " + sqle.getErrorCode());
     }
 }

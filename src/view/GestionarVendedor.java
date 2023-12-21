@@ -4,7 +4,6 @@
  */
 package view;
 
-import controller.Validador;
 import controller.Vendedor;
 import model.VendedorDB;
 

@@ -16,7 +16,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author maste
  */
-public class Reportes extends DBConn {
+public final class Reportes extends DBConn {
     public static void generarComprobante(String idVenta) {
         try {
             String pathReporte = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\ComprobantePago.jasper";

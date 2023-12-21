@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 import controller.DetalleReporteInventario;
 
-public class DetalleReporteInventarioDB extends DBConn {
+public non-sealed class DetalleReporteInventarioDB extends DBConn {
 
     public static void insertarDetalleReporteInventario(DetalleReporteInventario detalle) {
         try {
@@ -22,7 +22,7 @@ public class DetalleReporteInventarioDB extends DBConn {
             }
 
         } catch (SQLException sqle) {
-            //handleSQLException(sqle);
+            handleSQLException(sqle);
         }
     } 
 }

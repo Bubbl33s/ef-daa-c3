@@ -4,13 +4,11 @@
  */
 package controller;
 
-import model.VendedorDB;
-
 /**
  *
  * @author maste
  */
-public class Usuario {
+public abstract class Usuario {
     protected String user;
     protected String password;
     
@@ -18,4 +16,6 @@ public class Usuario {
         this.user = user;
         this.password = password;
     }
+    
+    abstract void verCredenciales();
 }

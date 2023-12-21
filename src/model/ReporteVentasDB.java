@@ -15,7 +15,7 @@ import static model.DBConn.stmt;
  *
  * @author maste
  */
-public class ReporteVentasDB extends DBConn {
+public non-sealed class ReporteVentasDB extends DBConn {
     
     public static void generarReporteVentas(String tipoReporte) {
         try {
@@ -27,7 +27,7 @@ public class ReporteVentasDB extends DBConn {
                 pstmt.executeUpdate();
             }
         } catch (SQLException sqle) {
-            // Manejar la excepción según sea necesario
+            handleSQLException(sqle);
         }
     }
 
@@ -43,7 +43,7 @@ public class ReporteVentasDB extends DBConn {
             }
 
         } catch (SQLException sqle) {
-            
+            handleSQLException(sqle);
         }
 
         return ultimoId;

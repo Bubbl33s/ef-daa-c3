@@ -20,16 +20,14 @@ import static model.DBConn.stmt;
  *
  * @author maste
  */
-public class VentaDB extends DBConn{
+public non-sealed class VentaDB extends DBConn{
     public static String obtenerUltimoId() {
         String ultimoIdVenta = null;
 
         try {
-            // Consulta para obtener el último ID de la tabla tb_venta
             String sql = "SELECT MAX(id_venta) AS ultimo_id FROM tb_venta";
 
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                // Ejecutar la consulta
                 try (ResultSet rs = pstmt.executeQuery()) {
                     if (rs.next()) {
                         ultimoIdVenta = rs.getString("ultimo_id");
@@ -37,9 +35,7 @@ public class VentaDB extends DBConn{
                 }
             }
         } catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
 
         return ultimoIdVenta;
@@ -47,12 +43,9 @@ public class VentaDB extends DBConn{
 
     public static void insertar(Venta venta) {
         try {
-            // Consulta SQL para insertar una venta
             String sql = "INSERT INTO tb_venta (id_venta, id_cliente, id_vendedor, fecha_venta, sub_totaL_venta, igv_venta, descuento_venta, total_venta) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             
-            // Preparar la consulta
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                // Establecer los parámetros
                 pstmt.setString(1, venta.getId());
                 pstmt.setString(2, venta.getIdCliente());
                 pstmt.setString(3, venta.getIdVendedor());
@@ -66,10 +59,7 @@ public class VentaDB extends DBConn{
                 pstmt.executeUpdate();
             }
         } catch (SQLException sqle) {
-            // Manejar o relanzar la excepción según sea necesario
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
     }
 
@@ -90,9 +80,7 @@ public class VentaDB extends DBConn{
 
             rs.close();
         } catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
     }
 
@@ -104,9 +92,7 @@ public class VentaDB extends DBConn{
                 pstmt.executeUpdate();
             }
         } catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
     }
 
@@ -122,9 +108,7 @@ public class VentaDB extends DBConn{
 
             rs.close();
         } catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
+            handleSQLException(sqle);
         }
 
         // Convierte la lista a un array de String
@@ -157,8 +141,7 @@ public class VentaDB extends DBConn{
             }
 
         } catch (SQLException sqle) {
-            // Manejar o relanzar la excepción según sea necesario
-            sqle.printStackTrace();
+            handleSQLException(sqle);
         }
 
         return ventas;
@@ -189,8 +172,7 @@ public class VentaDB extends DBConn{
             }
 
         } catch (SQLException sqle) {
-            // Manejar o relanzar la excepción según sea necesario
-            sqle.printStackTrace();
+            handleSQLException(sqle);
         }
 
         return ventas;
@@ -224,8 +206,7 @@ public class VentaDB extends DBConn{
             }
 
         } catch (SQLException sqle) {
-            // Manejar o relanzar la excepción según sea necesario
-            sqle.printStackTrace();
+            handleSQLException(sqle);
         }
 
         return ventas;
