@@ -36,6 +36,27 @@ public class Reportes extends DBConn {
         }
     }
     
+    public static void reporteVentasVendedor(String idVendedor, String idReporte) {
+        try {
+            String pathReporte = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\ReporteVentasVendedor.jasper";
+            HashMap param = new HashMap();
+            param.put("paramIdVendedor", idVendedor);
+            param.put("paramIdReporte", idReporte);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    pathReporte, param, conn);
+            
+            String pathPDF = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\REPORTES PDF\\Reporte Ventas Vededor\\ReporteVentasVendedor" + idReporte + ".pdf";
+            JasperExportManager.exportReportToPdfFile(jasperPrint, pathPDF);
+            System.out.println("\nReporte de Ventas por Vendedor generado correctamente");
+            
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint);
+            jasperViewer.setVisible(true);
+
+        } catch (JRException jre) {
+            System.out.println("Error al generar el Reporte: " + jre.getMessage());
+        }
+    }
+    
     public static void reporteInventario(String idReporte) {
         try {
             String pathReporte = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\ReporteInventario.jasper";
@@ -44,7 +65,7 @@ public class Reportes extends DBConn {
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     pathReporte, param, conn);
             
-            String pathPDF = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\REPORTES PDF\\Reporte Inventario\\Comprobante" + idReporte + ".pdf";
+            String pathPDF = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\REPORTES PDF\\Reporte Inventario\\ReporteInventario" + idReporte + ".pdf";
             JasperExportManager.exportReportToPdfFile(jasperPrint, pathPDF);
             System.out.println("\nReporte de Inventario generado correctamente");
             

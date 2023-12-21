@@ -4,7 +4,10 @@
  */
 package controller;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  *
@@ -23,6 +26,35 @@ public class Venta {
     public Venta(LocalDate fecha, String idCliente, String idVendedor,
             double subTotal, double descuento) {
         this.id = "";
+        this.fecha = fecha;
+        this.idCliente = idCliente;
+        this.idVendedor = idVendedor;
+        this.subTotal = subTotal;
+        calcularIgvDescuento(descuento);
+        this.total = this.subTotal + this.igv - this.descuento;
+    }
+    
+    public Venta(String id, Date fecha, String idCliente, String idVendedor,
+            double subTotal, double igv, double descuento, double total) {
+        this.id = id;
+        
+        if (fecha != null) {
+            Instant instant = fecha.toInstant();
+            this.fecha = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        } else {
+            this.fecha = null;
+        }
+        
+        this.idCliente = idCliente;
+        this.idVendedor = idVendedor;
+        this.subTotal = subTotal;
+        calcularIgvDescuento(descuento);
+        this.total = this.subTotal + this.igv - this.descuento;
+    }
+    
+    public Venta(String id, LocalDate fecha, String idCliente, String idVendedor,
+            double subTotal, double igv, double descuento, double total) {
+        this.id = id;
         this.fecha = fecha;
         this.idCliente = idCliente;
         this.idVendedor = idVendedor;

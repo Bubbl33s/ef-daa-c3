@@ -6,10 +6,14 @@ package view;
 
 import model.*;
 import controller.Producto;
+import controller.Venta;
 import controller.DetalleReporteInventario;
+import controller.DetalleReporteVentas;   
+import java.util.Arrays;
 
 import java.util.Scanner;
 import java.util.List;
+
 
 public class EmitirReportes {
     static Scanner scanner = new Scanner(System.in);
@@ -49,7 +53,29 @@ public class EmitirReportes {
     }
 
     private static void reporteVentasPorVendedor() {
-        // Lógica para generar reporte de ventas por vendedor
+        String idVendedor;
+        
+        String[] idVendedores = VendedorDB.obtenerIds();
+        
+        // Obtener codigos
+        do {
+            System.out.print("\nCódigo de vendedor: ");
+            idVendedor = scanner.next().toUpperCase();
+        }
+        while (!Arrays.asList(idVendedores).contains(idVendedor));
+        
+        ReporteVentasDB.generarReporteVentas("V");
+        
+        String idReporteVentas = ReporteVentasDB.obtenerUltimoIdReporteVentas();
+        
+        List<Venta> ventasPorVendedor = VentaDB.obtenerVentasPorVendedor(idVendedor);
+        
+        for (Venta venta : ventasPorVendedor) {
+            DetalleReporteVentas detalle = new DetalleReporteVentas(idReporteVentas, venta.getId());
+            DetalleReporteVentasDB.insertarDetalleReporteVentas(detalle);
+        }
+        
+        Reportes.reporteVentasVendedor(idVendedor, idReporteVentas);
     }
 
     private static void reporteInventario() {
@@ -71,7 +97,5 @@ public class EmitirReportes {
         
         // Generar PDF
         Reportes.reporteInventario(idReporteInventario);
-
-        System.out.println("\nReporte de inventario generado exitosamente.");
     }
 }

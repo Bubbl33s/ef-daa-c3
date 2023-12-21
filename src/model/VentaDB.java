@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import controller.Venta;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+
 import static model.DBConn.rs;
 import static model.DBConn.stmt;
 
@@ -128,4 +130,37 @@ public class VentaDB extends DBConn{
         // Convierte la lista a un array de String
         return idsProductos.toArray(String[]::new);
     }    
+
+    public static List<Venta> obtenerVentasPorVendedor(String idVendedor) {
+        List<Venta> ventas = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM TB_VENTA WHERE id_vendedor = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, idVendedor);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        String idVenta = rs.getString("id_venta");
+                        LocalDate fechaVenta = rs.getDate("fecha_venta").toLocalDate();
+                        String idCliente = rs.getString("id_cliente");
+                        double subTotal = rs.getDouble("sub_total_venta");
+                        double igv = rs.getDouble("igv_venta");
+                        double descuento = rs.getDouble("descuento_venta");
+                        double total = rs.getDouble("total_venta");
+
+                        // Crear una instancia de Venta con los datos obtenidos
+                        Venta venta = new Venta(idVenta, fechaVenta, idCliente, idVendedor, subTotal, igv, descuento, total);
+                        ventas.add(venta);
+                    }
+                }
+            }
+
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            sqle.printStackTrace();
+        }
+
+        return ventas;
+    }
 }
