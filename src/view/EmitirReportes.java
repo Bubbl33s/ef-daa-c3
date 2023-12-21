@@ -10,6 +10,8 @@ import controller.Venta;
 import controller.DetalleReporteInventario;
 import controller.DetalleReporteVentas;   
 import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import java.util.Scanner;
 import java.util.List;
@@ -45,11 +47,62 @@ public class EmitirReportes {
     }
 
     private static void reporteVentasPorFechas() {
-        // Lógica para generar reporte de ventas por fechas
+        System.out.println("\n***** Reporte de Ventas por Fechas *****");
+
+        LocalDate fechaInicio = null;
+        LocalDate fechaFin = null;
+
+        do {
+            System.out.print("Ingrese la fecha de inicio (YYYY-MM-DD): ");
+            String fechaInicioStr = scanner.next();
+            try {
+                fechaInicio = LocalDate.parse(fechaInicioStr);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha incorrecto. Por favor, ingrese una fecha válida.");
+            }
+        } while (fechaInicio == null);
+
+        do {
+            System.out.print("Ingrese la fecha de fin (YYYY-MM-DD): ");
+            String fechaFinStr = scanner.next();
+            try {
+                fechaFin = LocalDate.parse(fechaFinStr);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha incorrecto. Por favor, ingrese una fecha válida.");
+            }
+        } while (fechaFin == null);
+
+        List<Venta> ventasPorFechas = VentaDB.obtenerVentasPorFechas(fechaInicio, fechaFin);
+
+        if (!ventasPorFechas.isEmpty()) {
+            ReporteVentasDB.generarReporteVentas("F");
+            String idReporteVentas = ReporteVentasDB.obtenerUltimoIdReporteVentas();
+
+            for (Venta venta : ventasPorFechas) {
+                DetalleReporteVentas detalle = new DetalleReporteVentas(idReporteVentas, venta.getId());
+                DetalleReporteVentasDB.insertarDetalleReporteVentas(detalle);
+            }
+
+            Reportes.reporteVentasFecha(idReporteVentas, fechaInicio, fechaFin);
+
+        } else {
+            System.out.println("No hay ventas en el rango de fechas especificado.");
+        }
     }
 
     private static void reporteGeneralVentas() {
-        // Lógica para generar reporte general de ventas
+        ReporteVentasDB.generarReporteVentas("G");
+        
+        String idReporteVentas = ReporteVentasDB.obtenerUltimoIdReporteVentas();
+        
+        List<Venta> ventas = VentaDB.obtenerTodasLasVentas();
+        
+        for (Venta venta : ventas) {
+            DetalleReporteVentas detalle = new DetalleReporteVentas(idReporteVentas, venta.getId());
+            DetalleReporteVentasDB.insertarDetalleReporteVentas(detalle);
+        }
+        
+        Reportes.reporteVentasGeneral(idReporteVentas);
     }
 
     private static void reporteVentasPorVendedor() {

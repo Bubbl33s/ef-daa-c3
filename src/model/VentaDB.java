@@ -163,4 +163,71 @@ public class VentaDB extends DBConn{
 
         return ventas;
     }
+
+    public static List<Venta> obtenerTodasLasVentas() {
+        List<Venta> ventas = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM TB_VENTA";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql);
+                 ResultSet rs = pstmt.executeQuery()) {
+
+                while (rs.next()) {
+                    String idVenta = rs.getString("id_venta");
+                    LocalDate fechaVenta = rs.getObject("fecha_venta", LocalDate.class);
+                    String idCliente = rs.getString("id_cliente");
+                    String idVendedor = rs.getString("id_vendedor");
+                    double subTotal = rs.getDouble("sub_total_venta");
+                    double igv = rs.getDouble("igv_venta");
+                    double descuento = rs.getDouble("descuento_venta");
+                    double total = rs.getDouble("total_venta");
+
+                    // Crear una instancia de Venta con los datos obtenidos
+                    Venta venta = new Venta(idVenta, fechaVenta, idCliente, idVendedor, subTotal, igv, descuento, total);
+                    ventas.add(venta);
+                }
+            }
+
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            sqle.printStackTrace();
+        }
+
+        return ventas;
+    }
+    
+    public static List<Venta> obtenerVentasPorFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        List<Venta> ventas = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM TB_VENTA WHERE fecha_venta BETWEEN ? AND ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setDate(1, java.sql.Date.valueOf(fechaInicio));
+                pstmt.setDate(2, java.sql.Date.valueOf(fechaFin));
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        String idVenta = rs.getString("id_venta");
+                        LocalDate fechaVenta = rs.getObject("fecha_venta", LocalDate.class);
+                        String idCliente = rs.getString("id_cliente");
+                        String idVendedor = rs.getString("id_vendedor");
+                        double subTotal = rs.getDouble("sub_total_venta");
+                        double igv = rs.getDouble("igv_venta");
+                        double descuento = rs.getDouble("descuento_venta");
+                        double total = rs.getDouble("total_venta");
+
+                        // Crear una instancia de Venta con los datos obtenidos
+                        Venta venta = new Venta(idVenta, fechaVenta, idCliente, idVendedor, subTotal, igv, descuento, total);
+                        ventas.add(venta);
+                    }
+                }
+            }
+
+        } catch (SQLException sqle) {
+            // Manejar o relanzar la excepción según sea necesario
+            sqle.printStackTrace();
+        }
+
+        return ventas;
+    }
 }
