@@ -74,6 +74,7 @@ public class VenderProductos {
             }
             while (!Arrays.asList(idProductos).contains(idProducto));
             
+            // TODO: VALIDAR STOCK DISPONIBLE
             System.out.print("Cantidad: ");
             cantidad = scanner.nextInt();
             

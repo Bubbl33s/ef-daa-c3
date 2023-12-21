@@ -92,12 +92,11 @@ public class ProductoDB extends DBConn {
     // Método para insertar un nuevo producto
     public static void insertarProducto(Producto producto) {
         try {
-            String sql = "INSERT INTO tb_producto (id_producto, descripcion_producto, precio_producto, stock_producto) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO tb_producto (descripcion_producto, precio_producto, stock_producto) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, producto.getId());
-                pstmt.setString(2, producto.getDescripcion());
-                pstmt.setDouble(3, producto.getPrecio());
-                pstmt.setInt(4, producto.getStock());
+                pstmt.setString(1, producto.getDescripcion());
+                pstmt.setDouble(2, producto.getPrecio());
+                pstmt.setInt(3, producto.getStock());
                 pstmt.executeUpdate();
             }
         } catch (SQLException sqle) {
@@ -185,7 +184,9 @@ public class ProductoDB extends DBConn {
             }
         } catch (SQLException sqle) {
             // Manejar o relanzar la excepción según sea necesario
-            sqle.printStackTrace();
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }
 }

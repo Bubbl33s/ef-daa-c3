@@ -7,6 +7,8 @@ package model;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import controller.Vendedor;
 
@@ -77,5 +79,114 @@ public class VendedorDB extends DBConn {
         }
 
         return vendedor;
+    }
+    
+    public static void listarVendedores() {
+        try {
+            rs = stmt.executeQuery("SELECT * FROM tb_vendedor");
+
+            while (rs.next()) {
+                System.out.println(rs.getString("id_vendedor") + " - " +
+                        rs.getString("nombres_vendedor") + " - " +
+                        rs.getString("apellidos_vendedor") + " - " +
+                        rs.getString("user_vendedor") + " - " +
+                        rs.getString("password_vendedor"));
+            }
+
+            rs.close();
+        } catch (SQLException sqle) {
+            handleSQLException(sqle);
+        }
+    }
+
+    public static String[] obtenerIds() {
+        List<String> idsVendedores = new ArrayList<>();
+
+        try {
+            rs = stmt.executeQuery("SELECT id_vendedor FROM tb_vendedor");
+
+            while (rs.next()) {
+                idsVendedores.add(rs.getString("id_vendedor"));
+            }
+
+            rs.close();
+        } catch (SQLException sqle) {
+            handleSQLException(sqle);
+        }
+
+        // Convierte la lista a un array de String
+        return idsVendedores.toArray(String[]::new);
+    }
+
+    public static void insertarVendedor(Vendedor vendedor) {
+        try {
+            String sql = "INSERT INTO tb_vendedor (nombres_vendedor, apellidos_vendedor, user_vendedor, password_vendedor) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, vendedor.getNombres());
+                pstmt.setString(2, vendedor.getApellidos());
+                pstmt.setString(3, vendedor.getUser());
+                pstmt.setString(4, vendedor.getPassword());
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            handleSQLException(sqle);
+        }
+    }
+
+    public static Vendedor obtenerVendedorPorId(String idVendedor) {
+        Vendedor vendedor = null;
+        try {
+            String sql = "SELECT id_vendedor, nombres_vendedor, apellidos_vendedor, user_vendedor, password_vendedor FROM tb_vendedor WHERE id_vendedor = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, idVendedor);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        String id = rs.getString("id_vendedor");
+                        String nombres = rs.getString("nombres_vendedor");
+                        String apellidos = rs.getString("apellidos_vendedor");
+                        String user = rs.getString("user_vendedor");
+                        String password = rs.getString("password_vendedor");
+                        vendedor = new Vendedor(user, password, id, apellidos, nombres);
+                    }
+                }
+            }
+        } catch (SQLException sqle) {
+            handleSQLException(sqle);
+        }
+        return vendedor;
+    }
+
+    public static void actualizarVendedor(Vendedor vendedor) {
+        try {
+            String sql = "UPDATE tb_vendedor SET nombres_vendedor = ?, apellidos_vendedor = ?, user_vendedor = ?, password_vendedor = ? WHERE id_vendedor = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, vendedor.getNombres());
+                pstmt.setString(2, vendedor.getApellidos());
+                pstmt.setString(3, vendedor.getUser());
+                pstmt.setString(4, vendedor.getPassword());
+                pstmt.setString(5, vendedor.getId());
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            handleSQLException(sqle);
+        }
+    }
+
+    public static void eliminarVendedor(String idVendedor) {
+        try {
+            String sql = "DELETE FROM tb_vendedor WHERE id_vendedor = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, idVendedor);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException sqle) {
+            handleSQLException(sqle);
+        }
+    }
+
+    private static void handleSQLException(SQLException sqle) {
+        System.out.println("SQLException: " + sqle.getMessage());
+        System.out.println("SQLState: " + sqle.getSQLState());
+        System.out.println("VendorError: " + sqle.getErrorCode());
     }
 }

@@ -14,6 +14,13 @@ public class Producto {
     private double precio;
     private int stock;
     
+    public Producto(String descripcion, double precio, int stock) {
+        this.id = "";
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.stock = stock;
+    }
+
     public Producto(String id, String descripcion, double precio, int stock) {
         this.id = id;
         this.descripcion = descripcion;

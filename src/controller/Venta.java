@@ -31,17 +31,6 @@ public class Venta {
         this.total = this.subTotal + this.igv - this.descuento;
     }
     
-    public Venta(String id, LocalDate fecha, String idCliente, String idVendedor,
-            double subTotal, double descuento) {
-        this.id = id;
-        this.fecha = fecha;
-        this.idCliente = idCliente;
-        this.idVendedor = idVendedor;
-        this.subTotal = subTotal;
-        calcularIgvDescuento(descuento);
-        this.total = this.subTotal + this.igv - this.descuento;
-    }
-    
     private void calcularIgvDescuento(double descuento) {
         this.igv = this.subTotal * 0.18;
         this.descuento = (this.subTotal + this.igv) * (descuento / 100);

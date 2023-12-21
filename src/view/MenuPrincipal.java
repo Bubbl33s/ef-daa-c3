@@ -49,13 +49,13 @@ public class MenuPrincipal {
                     AnularComprobante.iniciar();
                     break;
                 case 3:
-                    // Lógica para gestionar inventario
+                    GestionarInventario.iniciar();
                     break;
                 case 4:
-                    // Lógica para gestionar clientes
+                    GestionarCliente.iniciar();
                     break;
                 case 5:
-                    // Lógica para gestionar vendedores
+                    GestionarVendedor.iniciar();
                     break;
                 case 6:
                     // Lógica para emitir reportes
