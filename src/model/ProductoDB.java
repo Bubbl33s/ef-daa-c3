@@ -189,4 +189,30 @@ public class ProductoDB extends DBConn {
             System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }
+    
+    public static List<Producto> obtenerProductosYCantidades() {
+        List<Producto> productosConCantidades = new ArrayList<>();
+
+        try {
+            String sql = "SELECT id_producto, descripcion_producto, precio_producto, stock_producto FROM TB_PRODUCTO";
+            try (ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    String idProducto = rs.getString("id_producto");
+                    String descripcion = rs.getString("descripcion_producto");
+                    double precio = rs.getDouble("precio_producto");
+                    int stock = rs.getInt("stock_producto");
+
+                    Producto producto = new Producto(idProducto, descripcion, precio, stock);
+                    productosConCantidades.add(producto);
+                }
+            }
+
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+
+        return productosConCantidades;
+    }
 }

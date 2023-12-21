@@ -4,9 +4,12 @@
  */
 package view;
 
-import model.Reportes;
+import model.*;
+import controller.Producto;
+import controller.DetalleReporteInventario;
 
 import java.util.Scanner;
+import java.util.List;
 
 public class EmitirReportes {
     static Scanner scanner = new Scanner(System.in);
@@ -50,6 +53,25 @@ public class EmitirReportes {
     }
 
     private static void reporteInventario() {
-        // Lógica para generar reporte de inventario
+        ReporteInventarioDB.generarReporteInventario();
+
+        // Obtener el último ID del reporte de inventario
+        String idReporteInventario = ReporteInventarioDB.obtenerUltimoIdReporteInventario();
+
+        // Obtener productos y cantidades actuales
+        List<Producto> productosConCantidades = ProductoDB.obtenerProductosYCantidades();
+
+        // Insertar detalles en la tabla TB_DETALLE_REP_INVENTARIO
+        for (Producto producto : productosConCantidades) {
+            DetalleReporteInventario detalle = new DetalleReporteInventario(idReporteInventario,
+                    producto.getId(), producto.getStock());
+
+            DetalleReporteInventarioDB.insertarDetalleReporteInventario(detalle);
+        }
+        
+        // Generar PDF
+        Reportes.reporteInventario(idReporteInventario);
+
+        System.out.println("\nReporte de inventario generado exitosamente.");
     }
 }

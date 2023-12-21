@@ -35,4 +35,24 @@ public class Reportes extends DBConn {
             System.out.println("Error al generar el comprobante: " + jre.getMessage());
         }
     }
+    
+    public static void reporteInventario(String idReporte) {
+        try {
+            String pathReporte = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\ReporteInventario.jasper";
+            HashMap param = new HashMap();
+            param.put("paramIdReporte", idReporte);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    pathReporte, param, conn);
+            
+            String pathPDF = "C:\\Users\\maste\\JaspersoftWorkspace\\MyReports\\REPORTES PDF\\Reporte Inventario\\Comprobante" + idReporte + ".pdf";
+            JasperExportManager.exportReportToPdfFile(jasperPrint, pathPDF);
+            System.out.println("\nReporte de Inventario generado correctamente");
+            
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint);
+            jasperViewer.setVisible(true);
+
+        } catch (JRException jre) {
+            System.out.println("Error al generar el Reporte: " + jre.getMessage());
+        }
+    }
 }

@@ -58,7 +58,7 @@ public class MenuPrincipal {
                     GestionarVendedor.iniciar();
                     break;
                 case 6:
-                    // Lógica para emitir reportes
+                    EmitirReportes.iniciar();
                     break;
                 case 7:
                     System.out.println("Saliendo del sistema...");
