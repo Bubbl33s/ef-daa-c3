@@ -16,6 +16,7 @@ public class Login {
 
     public static void ejecutarLogin() {
         String user, password;
+        boolean valido = false;
         
         System.out.println("\nVENTAS EFDAA");
         System.out.println("INICIO DE SESIÓN VENDEDORES");
@@ -33,6 +34,7 @@ public class Login {
                 validarCredenciales(user, password);
                 System.out.println("Credenciales válidas");
                 System.out.println("====================");
+                valido = true;
                 break;
             } catch (CredencialesInvalidasException e) {
                 System.out.println(e.getMessage());
@@ -46,8 +48,10 @@ public class Login {
 
         } while (true);
         
-        MenuPrincipal menuPrincipal = new MenuPrincipal(VendedorDB.obtenerVendedor(user));
-        menuPrincipal.mostrarMenu();
+        if (valido) {
+            MenuPrincipal menuPrincipal = new MenuPrincipal(VendedorDB.obtenerVendedor(user));
+            menuPrincipal.mostrarMenu();
+        }
     }
     
     public static void validarCredenciales(String inputUser, String inputPassword) throws CredencialesInvalidasException {
